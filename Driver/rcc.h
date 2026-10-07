@@ -273,6 +273,7 @@ void RCC_Enable_ADC1(void);
 //void RCC_Enable_ADC2(void);
 void RCC_Enable_AFIO(void);
 void RCC_Enable_USART1(void);
+void RCC_Enable_USART3(void);
 void RCC_Enable_CAN1(void);
 void RCC_Enable_DMA(void);
 

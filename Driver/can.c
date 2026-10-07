@@ -4,9 +4,18 @@
 #include "rcc.h"
 #include "gpio.h"
 #include "exti.h"
+#include "FreeRTOS.h"
+#include "projdefs.h"
+#include "event_groups.h"
+#include "semphr.h"
+#include "task.h"
 
 #define ID_node_Hub		101U
 #define ID_node_Load	67U
+
+extern QueueHandle_t can_rx_queue;
+
+ volatile uint32_t can_queue_drop_count = 0;//Kiem tra frame khong vao Queue
 
 volatile Status_Command Status_Hub;
 volatile Status_Command Status_Load;
@@ -333,11 +342,16 @@ void CAN1_Process_Frame(const CAN1_Frame_Type *Frame){
 
 void USB_LP_CAN1_RX0_IRQHandler(void){
 	CAN1_Frame_Type RxFrame;
+	BaseType_t task_woken;
 	while((CAN1_RF0R & 0x03) != 0){
 		if(CAN1_Receive(&RxFrame) != 0){
-			CAN1_Process_Frame(&RxFrame);
+			if(xQueueSendFromISR(can_rx_queue, &RxFrame, &task_woken) != pdPASS){
+				can_queue_drop_count ++;
+			}
+			//CAN1_Process_Frame(&RxFrame);
 		}
 	}
+	portYIELD_FROM_ISR(task_woken);
 }
 
 void NVIC_CAN1_En(void){

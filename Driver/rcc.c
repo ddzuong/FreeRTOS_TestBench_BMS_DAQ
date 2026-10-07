@@ -69,6 +69,11 @@ void RCC_Enable_ADC1(void){
 void RCC_Enable_USART1(void){
 	RCC->APB2ENR.BITS.USART1EN = 1;
 }
+
+void RCC_Enable_USART3(void){
+	RCC->APB1ENR.BITS.USART3EN = 1;
+}
+
 //void RCC_Enable_ADC2(void){
 //	RCC->APB2ENR.BITS.ADC2EN	= 1;
 //}

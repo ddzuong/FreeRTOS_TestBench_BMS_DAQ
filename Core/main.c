@@ -1,7 +1,6 @@
 #include "main.h"
 
 //-----Macro-----//
-
 //-----Torque_Nm-----
 #define ADC_SAMPLE_TIME	100
 #define Torque_Filter		30
@@ -26,7 +25,6 @@ volatile uint8_t Num_Load_Level;
 #define Header_Frame_2	0x89
 #define End_Frame				0xFF
 
-//-----CALL API-----
 //-----ADC Sample Time-----
 static volatile uint16_t adc_value[ADC_SAMPLE_TIME]; //Read Analog from PA1
 
@@ -107,38 +105,127 @@ static void Telemetry_Send(void){
 		DMA_USART1_Start(tx_buffer, sizeof(tx_buffer));
 }
 
-volatile uint32_t cnt_GUI = 0;
-volatile uint32_t cnt_Rx_Decode = 0;
-volatile uint32_t cnt_Encode_Tx = 0;
+SemaphoreHandle_t xDMA_UartMutex;
+QueueHandle_t can_rx_queue;
+
+
+//-----CALL API-----//
+char buffer[100];
+void mPrintf(const char *format,...){
+	for(uint8_t i = 0; i < sizeof(buffer); i++){
+		buffer[i] = 0;
+	}
+  va_list args;
+  va_start(args, format);
+  vsnprintf(buffer, sizeof(buffer), format, args);
+  va_end(args);
+	USART3_SendString((char *)buffer);
+}
+
+int main(){
+	RCC_Config_8Mhz();//Enable Sysclock HSE is 8MHz
+	RCC_Enable_PortA();
+	RCC_Enable_PortB();
+	RCC_Enable_AFIO();
+	RCC_Enable_ADC1();
+	RCC_Enable_DMA();
+	RCC_Enable_Tim2();
+	RCC_Enable_CAN1();
+	RCC_Enable_USART1();
+	RCC_Enable_USART3();
+	
+void Task_User(void *parameter);
+void Task_Decode(void *parameter);
+void Task_Encode(void *parameter);
+	//USART2 - Debug Task
+	
+	
+	//DMA-ADC - Get signal data  
+	GPIO_Config(GPIOA, GPIO_PIN_0, GPIO_MODE_INPUT_ANALOG);
+	DMA_ADC1_Init(adc_value, ADC_SAMPLE_TIME, 1);//1: Circular mode
+	ADC1_CH0_Init();
+	
+	
+	//CAN-bus - Receive Message from VESCs
+//	GPIO_Config(GPIOA, GPIO_PIN_11, GPIO_MODE_INPUT_FLOATING);// RxCAN
+//	GPIO_Config(GPIOA, GPIO_PIN_12, GPIO_MODE_OUTPUT_AF_PP);//TxCAN
+	CAN1_Init(500000, 1);
+
+	
+	//GPIO-Load level
+	GPIO_Config(GPIOA, GPIO_PIN_1, GPIO_MODE_INPUT_PU);//Low load
+	GPIO_Config(GPIOA, GPIO_PIN_2, GPIO_MODE_INPUT_PU);//Medium load
+	GPIO_Config(GPIOA, GPIO_PIN_3, GPIO_MODE_INPUT_PU);//High load
+	
+	//DMA-UART
+	USART1_Init(115200);
+	DMA_USART1_Init();
+	
+	USART3_Init(9600);
+	
+	xDMA_UartMutex = xSemaphoreCreateMutex();
+	can_rx_queue = xQueueCreate(16, sizeof(CAN1_Frame_Type));
+	
+	if(xTaskCreate(Task_User, "User", 256, NULL, 3, NULL) != pdPASS ||
+		xTaskCreate(Task_Decode, "Receive_Decode", 256, NULL, 2, NULL) != pdPASS||
+		xTaskCreate(Task_Encode, "Encode_Transmit", 256, NULL, 1, NULL) != pdPASS) {
+		mPrintf("Tasks are not creat\n");
+			while(1){}
+		}
+	
+	if(can_rx_queue == NULL){
+		mPrintf("CAN_RX_Queue is not creat\n");
+	}
+	
+	
+	vTaskStartScheduler();
+	
+	while(1){}
+	return 0;
+}
 
 //-----Task-----
-void Task_GUI(void *parameter){
+void Task_User(void *parameter){
 	
+	mPrintf("Task User is running\n");
 	while(1){
-		cnt_GUI ++;
 		if(GPIO_Read_Pin(GPIOA, GPIO_PIN_1) == 0){
 			Num_Load_Level = 1;
 			VESC_SET_CURRENT_BRAKE(Low_Load);
+			mPrintf("Low load\n");
 		}
 		else if(GPIO_Read_Pin(GPIOA, GPIO_PIN_2) == 0){
 			Num_Load_Level = 2;
 			VESC_SET_CURRENT_BRAKE(Medium_Load);
+			mPrintf("Medium load\n");
 		}
 		else if(GPIO_Read_Pin(GPIOA, GPIO_PIN_3) == 0){
 			Num_Load_Level = 3;
 			VESC_SET_CURRENT_BRAKE(High_Load);
+			mPrintf("High load\n");
 		}
 		else{
 			Num_Load_Level = 0;
 			VESC_SET_CURRENT_BRAKE(No_Load);
+			mPrintf("None load\n");
 		}
-		vTaskDelay(pdMS_TO_TICKS(100));
+		vTaskDelay(pdMS_TO_TICKS(1000));
 	}
 }
 
-void Task_Receive_Decode(void *parameter){
+CAN1_Frame_Type frame;
+volatile uint32_t can_processed_count = 0;
+void Task_Decode(void *parameter){
+	mPrintf("Task Decode is running\n");
+	
 	while(1){
-		cnt_Rx_Decode ++;
+		
+		if(xQueueReceive(can_rx_queue, &frame, pdMS_TO_TICKS(5)) == pdTRUE){
+			CAN1_Process_Frame(&frame);
+			can_processed_count++;
+		}
+		
+		
 		if(DMA_ADC1_Process()){
 			uint32_t sum = 0;
 			for(uint8_t i = 0; i < ADC_SAMPLE_TIME; i++){
@@ -160,6 +247,7 @@ void Task_Receive_Decode(void *parameter){
 			//Scale minimum value to 0Nm
 			if((raw_torque_Nm < Torque_DEADBAND) && (raw_torque_Nm > - Torque_DEADBAND)){
 				torque_Nm = 0.0f;
+				mPrintf("Torque Nm = %.2f", torque_Nm);
 			}
 		}
 		
@@ -180,37 +268,17 @@ void Task_Receive_Decode(void *parameter){
 		RPM_H = ERPM_H / H_Poles_Pair;
 		Speed_Kpm = RPM_H*(2*3.14f*R_Tire/1000.0f) * 60/1000;
 		
-		vTaskDelay(pdMS_TO_TICKS(50));
+		vTaskDelay(pdMS_TO_TICKS(500));
 	}
 }
 
-void Task_Encode_Transmit(void *parameter){
+void Task_Encode(void *parameter){
+	mPrintf("Task Encode is running\n");;
 	while(1){
-		cnt_Encode_Tx ++;
+		xSemaphoreTake(xDMA_UartMutex, portMAX_DELAY);
+		
 		Telemetry_Send();
-		vTaskDelay(pdMS_TO_TICKS(50));
+		vTaskDelay(pdMS_TO_TICKS(500));
 	}
 	
-}
-
-int main(){
-	
-	xTaskCreate(Task_GUI, "GUI", 256, NULL, 3, NULL);
-	xTaskCreate(Task_Receive_Decode, "Receive_Decode", 256, NULL, 2, NULL);
-	xTaskCreate(Task_Encode_Transmit, "Encode_Transmit", 256, NULL, 1, NULL);
-	
-	vTaskStartScheduler();
-	
-	RCC_Config_8Mhz();//Enable Sysclock HSE is 8MHz
-	RCC_Enable_PortA();
-	RCC_Enable_AFIO();
-	RCC_Enable_ADC1();
-	RCC_Enable_DMA();
-	RCC_Enable_Tim2();
-	RCC_Enable_CAN1();
-	RCC_Enable_USART1();
-	
-	while(1){
-	}
-	return 0;
 }

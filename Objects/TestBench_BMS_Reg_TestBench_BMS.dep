@@ -1,15 +1,15 @@
 Dependencies for Project 'TestBench_BMS_Reg', Target 'TestBench_BMS': (DO NOT MODIFY !)
 CompilerVersion: 6240000::V6.24::ARMCLANG
-F (.\Core\main.c)(0x6ABFF0BB)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/main.o -MMD)
+F (.\Core\main.c)(0x6AC60621)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/main.o -MMD)
 I (Core\main.h)(0x6ABFE7A8)
-I (Driver\rcc.h)(0x6AAB79B5)
+I (Driver\rcc.h)(0x6AC34B73)
 I (Driver\gpio.h)(0x6A992EC4)
 I (Driver\exti.h)(0x6AA556CB)
 I (Driver\TYPE.h)(0x6A9960C9)
 I (Driver\afio.h)(0x6A995E45)
 I (Driver\tim.h)(0x6A9BA747)
 I (Driver\adc.h)(0x6A9BC9D2)
-I (Driver\uart.h)(0x6A9F7934)
+I (Driver\uart.h)(0x6AC34B37)
 I (Driver\can.h)(0x6AAD86D5)
 I (Driver\dma.h)(0x6AA5767E)
 I (freertos\include\FreeRTOS.h)(0x6ABF8DC1)
@@ -33,23 +33,49 @@ I (Driver\dma.h)(0x6AA5767E)
 F (.\Driver\adc.h)(0x6A9BC9D2)()
 F (.\Driver\afio.c)(0x6A994588)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/afio.o -MMD)
 F (.\Driver\afio.h)(0x6A995E45)()
-F (.\Driver\can.c)(0x6AAD1885)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/can.o -MMD)
+F (.\Driver\can.c)(0x6AC60621)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/can.o -MMD)
 I (Driver\can.h)(0x6AAD86D5)
-I (Driver\rcc.h)(0x6AAB79B5)
+I (Driver\rcc.h)(0x6AC34B73)
 I (Driver\gpio.h)(0x6A992EC4)
 I (Driver\exti.h)(0x6AA556CB)
 I (Driver\TYPE.h)(0x6A9960C9)
 I (Driver\afio.h)(0x6A995E45)
+I (freertos\include\FreeRTOS.h)(0x6ABF8DC1)
+I (freertos\include\FreeRTOSConfig.h)(0x6ABF92F8)
+I (freertos\include\projdefs.h)(0x6ABF8DC1)
+I (freertos\include\portable.h)(0x6ABF8DC1)
+I (freertos\include\deprecated_definitions.h)(0x6ABF8DC1)
+I (freertos\portable\GCC\ARM_CM3\portmacro.h)(0x6ABF8DC1)
+I (freertos\include\mpu_wrappers.h)(0x6ABF8DC1)
+I (freertos\include\event_groups.h)(0x6ABF8DC1)
+I (freertos\include\timers.h)(0x6ABF8DC1)
+I (freertos\include\task.h)(0x6ABF8DC1)
+I (freertos\include\list.h)(0x6ABF8DC1)
+I (freertos\include\semphr.h)(0x6ABF8DC1)
+I (freertos\include\queue.h)(0x6ABF8DC1)
 F (.\Driver\can.h)(0x6AAD86D5)()
-F (.\Driver\dma.c)(0x6AAEAAC0)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/dma.o -MMD)
+F (.\Driver\dma.c)(0x6AC3B575)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/dma.o -MMD)
 I (Driver\dma.h)(0x6AA5767E)
-I (Driver\rcc.h)(0x6AAB79B5)
+I (Driver\rcc.h)(0x6AC34B73)
 I (Driver\adc.h)(0x6A9BC9D2)
 I (Driver\exti.h)(0x6AA556CB)
 I (Driver\TYPE.h)(0x6A9960C9)
 I (Driver\afio.h)(0x6A995E45)
 I (Driver\gpio.h)(0x6A992EC4)
-I (Driver\uart.h)(0x6A9F7934)
+I (Driver\uart.h)(0x6AC34B37)
+I (freertos\include\FreeRTOS.h)(0x6ABF8DC1)
+I (freertos\include\FreeRTOSConfig.h)(0x6ABF92F8)
+I (freertos\include\projdefs.h)(0x6ABF8DC1)
+I (freertos\include\portable.h)(0x6ABF8DC1)
+I (freertos\include\deprecated_definitions.h)(0x6ABF8DC1)
+I (freertos\portable\GCC\ARM_CM3\portmacro.h)(0x6ABF8DC1)
+I (freertos\include\mpu_wrappers.h)(0x6ABF8DC1)
+I (freertos\include\event_groups.h)(0x6ABF8DC1)
+I (freertos\include\timers.h)(0x6ABF8DC1)
+I (freertos\include\task.h)(0x6ABF8DC1)
+I (freertos\include\list.h)(0x6ABF8DC1)
+I (freertos\include\semphr.h)(0x6ABF8DC1)
+I (freertos\include\queue.h)(0x6ABF8DC1)
 F (.\Driver\dma.h)(0x6AA5767E)()
 F (.\Driver\exti.c)(0x6AA556CB)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/exti.o -MMD)
 I (Driver\exti.h)(0x6AA556CB)
@@ -60,9 +86,9 @@ F (.\Driver\exti.h)(0x6AA556CB)()
 F (.\Driver\gpio.c)(0x6AACF938)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/gpio.o -MMD)
 I (Driver\gpio.h)(0x6A992EC4)
 F (.\Driver\gpio.h)(0x6A992EC4)()
-F (.\Driver\rcc.c)(0x6AABA629)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/rcc.o -MMD)
-I (Driver\rcc.h)(0x6AAB79B5)
-F (.\Driver\rcc.h)(0x6AAB79B5)()
+F (.\Driver\rcc.c)(0x6AC34B73)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/rcc.o -MMD)
+I (Driver\rcc.h)(0x6AC34B73)
+F (.\Driver\rcc.h)(0x6AC34B73)()
 F (.\Driver\tim.c)(0x6A9BBE2D)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/tim.o -MMD)
 I (Driver\tim.h)(0x6A9BA747)
 I (Driver\exti.h)(0x6AA556CB)
@@ -71,14 +97,15 @@ I (Driver\afio.h)(0x6A995E45)
 I (Driver\gpio.h)(0x6A992EC4)
 F (.\Driver\tim.h)(0x6A9BA747)()
 F (.\Driver\TYPE.h)(0x6A9960C9)()
-F (.\Driver\uart.c)(0x6AB0F019)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/uart.o -MMD)
-I (Driver\uart.h)(0x6A9F7934)
+F (.\Driver\uart.c)(0x6AC3719C)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/uart.o -MMD)
+I (Driver\uart.h)(0x6AC34B37)
 I (Driver\gpio.h)(0x6A992EC4)
 I (Driver\exti.h)(0x6AA556CB)
 I (Driver\TYPE.h)(0x6A9960C9)
 I (Driver\afio.h)(0x6A995E45)
 I (Driver\dma.h)(0x6AA5767E)
-F (.\Driver\uart.h)(0x6A9F7934)()
+I (Driver\tim.h)(0x6A9BA747)
+F (.\Driver\uart.h)(0x6AC34B37)()
 F (.\freertos\croutine.c)(0x6ABF8DC1)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./Core -I ./Driver -I ./freertos/include -I ./freertos/portable/GCC/ARM_CM3-I./RTE/Device/STM32F103CB-I./RTE/_TestBench_BMS-ID:/KeilC/arm/pack/ARM/CMSIS/6.3.0/CMSIS/Core/Include-ID:/KeilC/arm/pack/Keil/STM32F1xx_DFP/2.4.1/Device/Include-D__UVISION_VERSION="543" -DSTM32F10X_MD -D_RTE_-o ./objects/croutine.o -MMD)
 I (freertos\include\FreeRTOS.h)(0x6ABF8DC1)
 I (freertos\include\FreeRTOSConfig.h)(0x6ABF92F8)
