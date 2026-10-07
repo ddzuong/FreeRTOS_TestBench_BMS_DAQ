@@ -105,8 +105,8 @@ static void Telemetry_Send(void){
 		DMA_USART1_Start(tx_buffer, sizeof(tx_buffer));
 }
 
-SemaphoreHandle_t xDMA_Uart_Semaphore;
-QueueHandle_t can_rx_queue;
+SemaphoreHandle_t xDMA_Uart_Semaphore; //Process encode data to transmit UART
+QueueHandle_t can_rx_queue;//Process encode data from Receive CAN 
 
 
 //-----CALL API-----//
@@ -156,7 +156,8 @@ void Task_Encode(void *parameter);
 	
 	USART3_Init(9600);
 	
-	xDMA_Uart_Semaphore = xSemaphoreCreateMutex();
+	
+	xDMA_Uart_Semaphore = xSemaphoreCreateBinary();
 	can_rx_queue = xQueueCreate(16, sizeof(CAN1_Frame_Type));
 	
 	if(xTaskCreate(Task_User, "User", 256, NULL, 3, NULL) != pdPASS ||
@@ -170,7 +171,12 @@ void Task_Encode(void *parameter);
 		mPrintf("CAN_RX_Queue is not creat\n");
 	}
 	
+	if(xDMA_Uart_Semaphore == NULL){
+		mPrintf("Semaphore is not creat\n");
+		while(1){}
+	}
 	
+	xSemaphoreGive(xDMA_Uart_Semaphore); //Release Semaphore to Task encode runs
 	vTaskStartScheduler();
 	
 	while(1){}

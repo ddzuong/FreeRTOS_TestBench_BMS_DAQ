@@ -6,11 +6,13 @@
 #include "uart.h"
 #include <stdio.h>
 #include <stddef.h>
+
 #include "FreeRTOS.h"
 #include "projdefs.h"
 #include "event_groups.h"
 #include "semphr.h"
 #include "task.h"
+
 
 extern SemaphoreHandle_t xDMA_Uart_Semaphore;
 
@@ -99,9 +101,9 @@ void DMA1_Channel4_IRQHandler(void){
 		DMA_CCR4 &= ~(uint32_t)(1 << 0);//Disable channle 4
 		DMA_IFCR = (1 << 12);
 		dma_usart1_busy = false;
-		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    xSemaphoreGiveFromISR(xDMA_Uart_Semaphore,
-                          &xHigherPriorityTaskWoken);
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+		
+		BaseType_t Woken_UART_DMA = pdFALSE; 
+		xSemaphoreGiveFromISR(xDMA_Uart_Semaphore, &Woken_UART_DMA);
+		portYIELD_FROM_ISR(&Woken_UART_DMA);
 	}
 }
