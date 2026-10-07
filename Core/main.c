@@ -105,7 +105,7 @@ static void Telemetry_Send(void){
 		DMA_USART1_Start(tx_buffer, sizeof(tx_buffer));
 }
 
-SemaphoreHandle_t xDMA_UartMutex;
+SemaphoreHandle_t xDMA_Uart_Semaphore;
 QueueHandle_t can_rx_queue;
 
 
@@ -156,12 +156,12 @@ void Task_Encode(void *parameter);
 	
 	USART3_Init(9600);
 	
-	xDMA_UartMutex = xSemaphoreCreateMutex();
+	xDMA_Uart_Semaphore = xSemaphoreCreateMutex();
 	can_rx_queue = xQueueCreate(16, sizeof(CAN1_Frame_Type));
 	
 	if(xTaskCreate(Task_User, "User", 256, NULL, 3, NULL) != pdPASS ||
 		xTaskCreate(Task_Decode, "Receive_Decode", 256, NULL, 2, NULL) != pdPASS||
-		xTaskCreate(Task_Encode, "Encode_Transmit", 256, NULL, 1, NULL) != pdPASS) {
+		xTaskCreate(Task_Encode, "Encode_Transmit", 256, NULL, 2, NULL) != pdPASS) {
 		mPrintf("Tasks are not creat\n");
 			while(1){}
 		}
@@ -180,29 +180,29 @@ void Task_Encode(void *parameter);
 //-----Task-----
 void Task_User(void *parameter){
 	
-	//mPrintf("Task User is running\n");
+	mPrintf("Task User is running\n");
 	while(1){
 		if(GPIO_Read_Pin(GPIOA, GPIO_PIN_1) == 0){
 			Num_Load_Level = 1;
 			VESC_SET_CURRENT_BRAKE(Low_Load);
-			mPrintf("Low load\n");
+			//mPrintf("Low load\n");
 		}
 		else if(GPIO_Read_Pin(GPIOA, GPIO_PIN_2) == 0){
 			Num_Load_Level = 2;
 			VESC_SET_CURRENT_BRAKE(Medium_Load);
-			mPrintf("Medium load\n");
+			//mPrintf("Medium load\n");
 		}
 		else if(GPIO_Read_Pin(GPIOA, GPIO_PIN_3) == 0){
 			Num_Load_Level = 3;
 			VESC_SET_CURRENT_BRAKE(High_Load);
-			mPrintf("High load\n");
+			//mPrintf("High load\n");
 		}
 		else{
 			Num_Load_Level = 0;
 			VESC_SET_CURRENT_BRAKE(No_Load);
-			mPrintf("None load\n");
+			//mPrintf("None load\n");
 		}
-		vTaskDelay(pdMS_TO_TICKS(10));
+		vTaskDelay(pdMS_TO_TICKS(100));
 	}
 }
 
@@ -222,58 +222,58 @@ void Task_Decode(void *parameter){
 		}
 		
 		
-//		if(DMA_ADC1_Process()){
-//			uint32_t sum = 0;
-//			for(uint8_t i = 0; i < ADC_SAMPLE_TIME; i++){
-//				sum += adc_value[i];
-//			}
-//			float adc_avg = (float)sum/ADC_SAMPLE_TIME;
-//			float v_measure = (adc_avg * 3.3f)/4095;
-//			float raw_torque_Nm = (v_measure - v_offset)/Sens;
-//			
-//			if((raw_torque_Nm < 30.0f) && (raw_torque_Nm > -30.0f)){
-//				torque_Nm = raw_torque_Nm;
-//			}
-//			else if((raw_torque_Nm > 30.0f)){
-//				torque_Nm = 30.0f;
-//			}
-//			else if((raw_torque_Nm < -30.0f)){
-//				torque_Nm = -30.0f;
-//			}
-//			//Scale minimum value to 0Nm
-//			if((raw_torque_Nm < Torque_DEADBAND) && (raw_torque_Nm > - Torque_DEADBAND)){
-//				torque_Nm = 0.0f;
-//				mPrintf("Torque Nm = %.2f", torque_Nm);
-//			}
-//		}
-//		
+		if(DMA_ADC1_Process()){
+			uint32_t sum = 0;
+			for(uint8_t i = 0; i < ADC_SAMPLE_TIME; i++){
+				sum += adc_value[i];
+			}
+			float adc_avg = (float)sum/ADC_SAMPLE_TIME;
+			float v_measure = (adc_avg * 3.3f)/4095;
+			float raw_torque_Nm = (v_measure - v_offset)/Sens;
+			
+			if((raw_torque_Nm < 30.0f) && (raw_torque_Nm > -30.0f)){
+				torque_Nm = raw_torque_Nm;
+			}
+			else if((raw_torque_Nm > 30.0f)){
+				torque_Nm = 30.0f;
+			}
+			else if((raw_torque_Nm < -30.0f)){
+				torque_Nm = -30.0f;
+			}
+			//Scale minimum value to 0Nm
+			if((raw_torque_Nm < Torque_DEADBAND) && (raw_torque_Nm > - Torque_DEADBAND)){
+				torque_Nm = 0.0f;
+				mPrintf("Torque Nm = %.2f", torque_Nm);
+			}
+		}
 		
-//		//CAN receive - Decode 
-//		ERPM_H = Status_Hub.Status_1.ERPM / 1.0f;
-//		Current_H = Status_Hub.Status_1.Current / 10.0f;
-//		Duty_Cycle_H = Status_Hub.Status_1.Duty / 1000.0f;
-//		Current_In_H = Status_Hub.Status_4.Current_In / 10.0f;
-//		Volts_In_H = Status_Hub.Status_5.Volts_In / 10.0f;
-//		
-//		ERPM_L = Status_Load.Status_1.ERPM / 1.0f;
-//		Current_L = Status_Load.Status_1.Current / 10.0f;
-//		Duty_Cycle_L = Status_Load.Status_1.Duty / 1000.0f;
-//		Current_In_L = Status_Load.Status_4.Current_In / 10.0f;
-//		Volts_In_L = Status_Load.Status_5.Volts_In / 10.0f;
-//		
-//		RPM_H = ERPM_H / H_Poles_Pair;
-//		Speed_Kpm = RPM_H*(2*3.14f*R_Tire/1000.0f) * 60/1000;
-//		
+		
+		//CAN receive - Decode 
+		ERPM_H = Status_Hub.Status_1.ERPM / 1.0f;
+		Current_H = Status_Hub.Status_1.Current / 10.0f;
+		Duty_Cycle_H = Status_Hub.Status_1.Duty / 1000.0f;
+		Current_In_H = Status_Hub.Status_4.Current_In / 10.0f;
+		Volts_In_H = Status_Hub.Status_5.Volts_In / 10.0f;
+		
+		ERPM_L = Status_Load.Status_1.ERPM / 1.0f;
+		Current_L = Status_Load.Status_1.Current / 10.0f;
+		Duty_Cycle_L = Status_Load.Status_1.Duty / 1000.0f;
+		Current_In_L = Status_Load.Status_4.Current_In / 10.0f;
+		Volts_In_L = Status_Load.Status_5.Volts_In / 10.0f;
+		
+		RPM_H = ERPM_H / H_Poles_Pair;
+		Speed_Kpm = RPM_H*(2*3.14f*R_Tire/1000.0f) * 60/1000;
+		
 	}
 }
 
 void Task_Encode(void *parameter){
 	mPrintf("Task Encode is running\n");;
 	while(1){
-		xSemaphoreTake(xDMA_UartMutex, portMAX_DELAY);
+		xSemaphoreTake(xDMA_Uart_Semaphore, portMAX_DELAY);
 		
 		Telemetry_Send();
-		vTaskDelay(pdMS_TO_TICKS(500));
+		vTaskDelay(pdMS_TO_TICKS(100));
 	}
 	
 }

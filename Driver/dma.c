@@ -12,7 +12,7 @@
 #include "semphr.h"
 #include "task.h"
 
-extern SemaphoreHandle_t xDMA_UartMutex;
+extern SemaphoreHandle_t xDMA_Uart_Semaphore;
 
 void DMA_Init(void){
 	RCC_Enable_DMA();
@@ -100,7 +100,7 @@ void DMA1_Channel4_IRQHandler(void){
 		DMA_IFCR = (1 << 12);
 		dma_usart1_busy = false;
 		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    xSemaphoreGiveFromISR(xDMA_UartMutex,
+    xSemaphoreGiveFromISR(xDMA_Uart_Semaphore,
                           &xHigherPriorityTaskWoken);
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 	}
