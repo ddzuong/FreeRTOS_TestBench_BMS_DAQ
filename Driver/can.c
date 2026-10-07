@@ -342,7 +342,7 @@ void CAN1_Process_Frame(const CAN1_Frame_Type *Frame){
 
 void USB_LP_CAN1_RX0_IRQHandler(void){
 	CAN1_Frame_Type RxFrame;
-	BaseType_t task_woken;
+	BaseType_t task_woken = pdFALSE;
 	while((CAN1_RF0R & 0x03) != 0){
 		if(CAN1_Receive(&RxFrame) != 0){
 			if(xQueueSendFromISR(can_rx_queue, &RxFrame, &task_woken) != pdPASS){
@@ -355,6 +355,9 @@ void USB_LP_CAN1_RX0_IRQHandler(void){
 }
 
 void NVIC_CAN1_En(void){
+	volatile uint8_t *nvic_ipr =(volatile uint8_t *)0xE000E400UL; //ARM-Cortex M3 p.128
+  nvic_ipr[20] = (uint8_t)(5U << 4);
+	
 	NVIC_ISER0 |= (1 << 20);
 	NVIC_ISER0 |= (1 << 22);//Enable CAN1_SCE
 }

@@ -226,49 +226,48 @@ void Task_Decode(void *parameter){
 		}
 		
 		
-		if(DMA_ADC1_Process()){
-			uint32_t sum = 0;
-			for(uint8_t i = 0; i < ADC_SAMPLE_TIME; i++){
-				sum += adc_value[i];
-			}
-			float adc_avg = (float)sum/ADC_SAMPLE_TIME;
-			float v_measure = (adc_avg * 3.3f)/4095;
-			float raw_torque_Nm = (v_measure - v_offset)/Sens;
-			
-			if((raw_torque_Nm < 30.0f) && (raw_torque_Nm > -30.0f)){
-				torque_Nm = raw_torque_Nm;
-			}
-			else if((raw_torque_Nm > 30.0f)){
-				torque_Nm = 30.0f;
-			}
-			else if((raw_torque_Nm < -30.0f)){
-				torque_Nm = -30.0f;
-			}
-			//Scale minimum value to 0Nm
-			if((raw_torque_Nm < Torque_DEADBAND) && (raw_torque_Nm > - Torque_DEADBAND)){
-				torque_Nm = 0.0f;
-				mPrintf("Torque Nm = %.2f", torque_Nm);
-			}
-		}
+//		if(DMA_ADC1_Process()){
+//			uint32_t sum = 0;
+//			for(uint8_t i = 0; i < ADC_SAMPLE_TIME; i++){
+//				sum += adc_value[i];
+//			}
+//			float adc_avg = (float)sum/ADC_SAMPLE_TIME;
+//			float v_measure = (adc_avg * 3.3f)/4095;
+//			float raw_torque_Nm = (v_measure - v_offset)/Sens;
+//			
+//			if((raw_torque_Nm < 30.0f) && (raw_torque_Nm > -30.0f)){
+//				torque_Nm = raw_torque_Nm;
+//			}
+//			else if((raw_torque_Nm > 30.0f)){
+//				torque_Nm = 30.0f;
+//			}
+//			else if((raw_torque_Nm < -30.0f)){
+//				torque_Nm = -30.0f;
+//			}
+//			//Scale minimum value to 0Nm
+//			if((raw_torque_Nm < Torque_DEADBAND) && (raw_torque_Nm > - Torque_DEADBAND)){
+//				torque_Nm = 0.0f;
+//				mPrintf("Torque Nm = %.2f", torque_Nm);
+//			}
+//		}
+//		
 		
-		
-		//CAN receive - Decode 
-		ERPM_H = Status_Hub.Status_1.ERPM / 1.0f;
-		Current_H = Status_Hub.Status_1.Current / 10.0f;
-		Duty_Cycle_H = Status_Hub.Status_1.Duty / 1000.0f;
-		Current_In_H = Status_Hub.Status_4.Current_In / 10.0f;
-		Volts_In_H = Status_Hub.Status_5.Volts_In / 10.0f;
-		
-		ERPM_L = Status_Load.Status_1.ERPM / 1.0f;
-		Current_L = Status_Load.Status_1.Current / 10.0f;
-		Duty_Cycle_L = Status_Load.Status_1.Duty / 1000.0f;
-		Current_In_L = Status_Load.Status_4.Current_In / 10.0f;
-		Volts_In_L = Status_Load.Status_5.Volts_In / 10.0f;
-		
-		RPM_H = ERPM_H / H_Poles_Pair;
-		Speed_Kpm = RPM_H*(2*3.14f*R_Tire/1000.0f) * 60/1000;
-		
-		vTaskDelay(pdMS_TO_TICKS(500));
+//		//CAN receive - Decode 
+//		ERPM_H = Status_Hub.Status_1.ERPM / 1.0f;
+//		Current_H = Status_Hub.Status_1.Current / 10.0f;
+//		Duty_Cycle_H = Status_Hub.Status_1.Duty / 1000.0f;
+//		Current_In_H = Status_Hub.Status_4.Current_In / 10.0f;
+//		Volts_In_H = Status_Hub.Status_5.Volts_In / 10.0f;
+//		
+//		ERPM_L = Status_Load.Status_1.ERPM / 1.0f;
+//		Current_L = Status_Load.Status_1.Current / 10.0f;
+//		Duty_Cycle_L = Status_Load.Status_1.Duty / 1000.0f;
+//		Current_In_L = Status_Load.Status_4.Current_In / 10.0f;
+//		Volts_In_L = Status_Load.Status_5.Volts_In / 10.0f;
+//		
+//		RPM_H = ERPM_H / H_Poles_Pair;
+//		Speed_Kpm = RPM_H*(2*3.14f*R_Tire/1000.0f) * 60/1000;
+//		
 	}
 }
 
