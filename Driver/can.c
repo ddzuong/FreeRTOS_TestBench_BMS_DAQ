@@ -379,7 +379,7 @@ void CAN1_SCE_IRQHandler(void){
 		CAN1_LastESR = esr;
 		CAN1_LastErr |= ((uint8_t)(esr >> 4) & 0x07);
 		CAN1_ESR &= ~(uint8_t)(0x07 << 4);
-		CAN1_MSR &= ~(uint8_t)(1 << 2);
+		CAN1_MSR = (uint8_t)(1 << 2);
 	}
 } 
 

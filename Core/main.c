@@ -144,14 +144,7 @@ void Task_Encode(void *parameter);
 	GPIO_Config(GPIOA, GPIO_PIN_0, GPIO_MODE_INPUT_ANALOG);
 	DMA_ADC1_Init(adc_value, ADC_SAMPLE_TIME, 1);//1: Circular mode
 	ADC1_CH0_Init();
-	
-	
-	//CAN-bus - Receive Message from VESCs
-//	GPIO_Config(GPIOA, GPIO_PIN_11, GPIO_MODE_INPUT_FLOATING);// RxCAN
-//	GPIO_Config(GPIOA, GPIO_PIN_12, GPIO_MODE_OUTPUT_AF_PP);//TxCAN
-	CAN1_Init(500000, 1);
-
-	
+		
 	//GPIO-Load level
 	GPIO_Config(GPIOA, GPIO_PIN_1, GPIO_MODE_INPUT_PU);//Low load
 	GPIO_Config(GPIOA, GPIO_PIN_2, GPIO_MODE_INPUT_PU);//Medium load
@@ -187,7 +180,7 @@ void Task_Encode(void *parameter);
 //-----Task-----
 void Task_User(void *parameter){
 	
-	mPrintf("Task User is running\n");
+	//mPrintf("Task User is running\n");
 	while(1){
 		if(GPIO_Read_Pin(GPIOA, GPIO_PIN_1) == 0){
 			Num_Load_Level = 1;
@@ -209,18 +202,21 @@ void Task_User(void *parameter){
 			VESC_SET_CURRENT_BRAKE(No_Load);
 			mPrintf("None load\n");
 		}
-		vTaskDelay(pdMS_TO_TICKS(1000));
+		vTaskDelay(pdMS_TO_TICKS(10));
 	}
 }
 
-CAN1_Frame_Type frame;
 volatile uint32_t can_processed_count = 0;
 void Task_Decode(void *parameter){
+	
+	CAN1_Frame_Type frame;
 	mPrintf("Task Decode is running\n");
+	
+	CAN1_Init(500000, 1);
 	
 	while(1){
 		
-		if(xQueueReceive(can_rx_queue, &frame, pdMS_TO_TICKS(5)) == pdTRUE){
+		if(xQueueReceive(can_rx_queue, &frame, pdMS_TO_TICKS(1)) == pdTRUE){
 			CAN1_Process_Frame(&frame);
 			can_processed_count++;
 		}
