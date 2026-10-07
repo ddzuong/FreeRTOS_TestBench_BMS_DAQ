@@ -148,7 +148,6 @@ typedef struct{
 	uint8_t DLC; //Length of data (unit: Byte)
 	uint8_t data[8]; //Data byte
 }CAN1_Frame_Type;
-
 //Rx Frame 
 typedef struct{
 	uint32_t id;
@@ -192,6 +191,65 @@ typedef struct{
 
 extern volatile Status_Command Status_Hub;
 extern volatile Status_Command Status_Load;
+
+typedef struct{
+	struct{
+		uint16_t Total_Voltage;
+		uint16_t Current;
+		uint16_t Balance_Capa;
+		uint16_t Rate_Capa;
+	}ID100;
+	
+	struct{
+		uint16_t Cycle;
+		uint16_t Production_date;
+		uint16_t Balance_Status;
+		uint16_t Balance_Status_H;
+	}ID101;
+	
+	struct{
+		uint16_t Protection_Status;
+		uint8_t SW_Version;
+		uint8_t RSOC;
+		uint8_t Fet_Ctrl_Sts;
+		uint8_t Battery_series;
+		uint8_t NTC_number;
+		uint8_t Temp_sensor1_L;
+	}ID102;
+	
+	struct{
+		uint8_t Temp_Sensor1_H;
+		uint16_t Temp_Sensor2;
+	}ID104;
+	
+	struct{
+		uint16_t Voltage_cell_1;
+		uint16_t Voltage_cell_2;
+		uint16_t Voltage_cell_3;
+		uint16_t Voltage_cell_4;
+	}ID105;
+
+	struct{
+		uint16_t Voltage_cell_5;
+		uint16_t Voltage_cell_6;
+		uint16_t Voltage_cell_7;
+		uint16_t Voltage_cell_8;
+	}ID106;
+	
+	struct{
+		uint16_t Voltage_cell_9;
+		uint16_t Voltage_cell_10;
+		uint16_t Voltage_cell_11;
+		uint16_t Voltage_cell_12;
+	}ID107;
+	
+	struct{
+		uint16_t Voltage_cell_13;
+	}ID108;
+	
+}BMS_TypeDef;
+extern volatile BMS_TypeDef ID_BMS;
+
 
 //Single-Frame (simple) Commands
 typedef enum{

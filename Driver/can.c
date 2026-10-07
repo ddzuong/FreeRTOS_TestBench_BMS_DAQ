@@ -20,6 +20,7 @@ extern QueueHandle_t can_rx_queue;
 volatile Status_Command Status_Hub;
 volatile Status_Command Status_Load;
 
+
 void CAN1_Init(uint32_t Baudrate, uint8_t Prescaler){
 	if((Baudrate != 500000U) || (Prescaler != 1U)){
 		return;
@@ -225,7 +226,7 @@ uint8_t CAN1_Receive(CAN1_Frame_Type *Frame){
 }
 
 void CAN1_Process_Frame(const CAN1_Frame_Type *Frame){
-	//Command ID 
+	//Command ID of VESC
 	uint16_t command_id;
 	uint16_t controller_id;
 	volatile Status_Command *target;
@@ -275,7 +276,6 @@ void CAN1_Process_Frame(const CAN1_Frame_Type *Frame){
 			target->Status_5.Volts_In = ((Frame->data[4] << 8) | (Frame->data[5] << 0));
 		break;
 	}
-		
 //		//Status1-----Command ID: 9------ERPM, Current, Duty Cycle
 //		uint32_t raw_erpm = ((Frame->data[0] << 24) | (Frame->data[1] << 16) | (Frame->data[2] << 8) | (Frame->data[3] << 0));
 //		uint16_t raw_current = ((Frame->data[4] << 8) | (Frame->data[5] << 0));
@@ -338,6 +338,40 @@ void CAN1_Process_Frame(const CAN1_Frame_Type *Frame){
 //		
 //		Status_Load.Status_5.Data.Tachometer = raw_tachometer;
 //		Status_Load.Status_5.Data.Volts_In = raw_volts_In;
+
+	//Decode Frame BMS data
+	volatile BMS_TypeDef *ID_BMS;
+	uint16_t id_bms;
+	id_bms = (Frame->ID & 0x0F);
+	if((Frame == NULL) | (Frame->IDE == 1)){
+		return;
+	}
+	switch(id_bms){
+		case 0:
+			ID_BMS->ID100.Total_Voltage = (uint16_t)(Frame->data[0] << 0 | Frame->data[1]);
+			ID_BMS->ID100.Current = (uint16_t)(Frame->data[2] << 0 | Frame->data[3]);
+			ID_BMS->ID100.Balance_Capa= (uint16_t)(Frame->data[4] << 0 | Frame->data[5]);
+			ID_BMS->ID100.Rate_Capa = (uint16_t)(Frame->data[6] << 0 | Frame->data[7]);
+			break;
+		case 1:
+			ID_BMS->ID101.Cycle = (uint16_t)(Frame->data[0] << 0 | Frame->data[1]);
+			ID_BMS->ID101.Production_date = (uint16_t)(Frame->data[2] << 0 | Frame->data[3]);
+			ID_BMS->ID101.Balance_Status = (uint16_t)(Frame->data[4] << 0 | Frame->data[5]);
+			ID_BMS->ID101.Balance_Status_H = (uint16_t)(Frame->data[6] << 0 | Frame->data[7]);
+			break;
+		case 2:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+	}
 } 
 
 void USB_LP_CAN1_RX0_IRQHandler(void){
