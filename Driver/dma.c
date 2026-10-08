@@ -104,6 +104,6 @@ void DMA1_Channel4_IRQHandler(void){
 		
 		BaseType_t Woken_UART_DMA = pdFALSE; 
 		xSemaphoreGiveFromISR(xDMA_Uart_Semaphore, &Woken_UART_DMA);
-		portYIELD_FROM_ISR(&Woken_UART_DMA);
+		portYIELD_FROM_ISR(Woken_UART_DMA);
 	}
 }

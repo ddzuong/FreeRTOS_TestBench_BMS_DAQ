@@ -348,7 +348,8 @@ void CAN1_Process_Frame(const CAN1_Frame_Type *Frame){
 	if((Frame == NULL) || (Frame->IDE == 1)){
 		return;
 	}
-	switch(Frame->ID){
+	if(Frame->IDE == 0){
+		switch(Frame->ID){
 		case 0x100:
 			BMS_Data->ID100.Total_Voltage = (int16_t)(Frame->data[0] << 8 | Frame->data[1]);
 			BMS_Data->ID100.Current	= (int16_t)(Frame->data[2] << 8 | Frame->data[3]);
@@ -395,6 +396,7 @@ void CAN1_Process_Frame(const CAN1_Frame_Type *Frame){
 		case 0x108:
 			BMS_Data->ID108.Voltage_cell_13 = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
 			break;
+	}
 	}
 } 
 
