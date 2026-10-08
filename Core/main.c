@@ -1,6 +1,8 @@
 #include "main.h"
 
 //-----Macro-----//
+
+//-----Private-----//
 //-----Torque_Nm-----
 #define ADC_SAMPLE_TIME	100
 #define Torque_Filter		30
@@ -82,7 +84,7 @@ typedef enum{
 	BMS_Balance_Capa,
 	BMS_Rate_Capa,
 	BMS_Cycle,
-	BMS_Production_data,
+	BMS_Production_date,
 	BMS_Balance_Status,
 	BMS_Balance_Status_H,
 	BMS_Protection_Status,
@@ -127,6 +129,40 @@ static void Telemetry_Send(void){
 		Buffer_data[Load_DutyCycle] = (float)Status_Load.Status_1.Duty;//Load_DutyCycle
 		Buffer_data[Load_Current_In] = (float)Status_Load.Status_4.Current_In;//Load_Current_In
 		Buffer_data[Load_Voltage_In] = (float)Status_Load.Status_5.Volts_In;
+	
+	
+		Buffer_data[BMS_Total_Voltage] = (float)mBMS.ID100.Total_Voltage;
+		Buffer_data[BMS_Current] = (float)mBMS.ID100.Current;
+		Buffer_data[BMS_Balance_Capa] = (float)mBMS.ID100.Balance_Capa;
+		Buffer_data[BMS_Rate_Capa] = (float)mBMS.ID100.Rate_Capa;
+		Buffer_data[BMS_Cycle] = (float)mBMS.ID101.Cycle;
+		Buffer_data[BMS_Production_date] = (float)mBMS.ID101.Production_date;
+		Buffer_data[BMS_Balance_Status] = (float)mBMS.ID101.Balance_Status;
+		Buffer_data[BMS_Balance_Status_H] = (float)mBMS.ID101.Balance_Status_H;
+		Buffer_data[BMS_Protection_Status] = (float)mBMS.ID102.Protection_Status;
+		Buffer_data[BMS_SW_Version] = (float)mBMS.ID102.SW_Version;
+		Buffer_data[BMS_RSOC] = (float)mBMS.ID102.RSOC;
+		Buffer_data[BMS_FET_Ctrl_Status] = (float)mBMS.ID102.Fet_Ctrl_Sts;
+		Buffer_data[BMS_Battery_Series] = (float)mBMS.ID102.Battery_series;
+		Buffer_data[BMS_NTC_Number] = (float)mBMS.ID102.NTC_number;
+		
+		uint16_t  temp_sensor1 = ((uint8_t)mBMS.ID102.Temp_sensor1_L << 8 | (uint8_t)mBMS.ID104.Temp_Sensor1_H);
+		
+		Buffer_data[BMS_Temp_Sensor1] = (float)temp_sensor1;
+		Buffer_data[BMS_Temp_Sensor2] = (float)mBMS.ID104.Temp_Sensor2;
+		Buffer_data[BMS_Voltage_Cell_1] = (float)mBMS.ID105.Voltage_cell_1;
+		Buffer_data[BMS_Voltage_Cell_2] = (float)mBMS.ID105.Voltage_cell_2;
+		Buffer_data[BMS_Voltage_Cell_3] = (float)mBMS.ID105.Voltage_cell_3;
+		Buffer_data[BMS_Voltage_Cell_4] = (float)mBMS.ID105.Voltage_cell_4;
+		Buffer_data[BMS_Voltage_Cell_5] = (float)mBMS.ID106.Voltage_cell_5;
+		Buffer_data[BMS_Voltage_Cell_6] = (float)mBMS.ID106.Voltage_cell_6;
+		Buffer_data[BMS_Voltage_Cell_7] = (float)mBMS.ID106.Voltage_cell_7;
+		Buffer_data[BMS_Voltage_Cell_8] = (float)mBMS.ID106.Voltage_cell_8;
+		Buffer_data[BMS_Voltage_Cell_9] = (float)mBMS.ID107.Voltage_cell_9;
+		Buffer_data[BMS_Voltage_Cell_10] = (float)mBMS.ID107.Voltage_cell_10;
+		Buffer_data[BMS_Voltage_Cell_11] = (float)mBMS.ID107.Voltage_cell_11;
+		Buffer_data[BMS_Voltage_Cell_12] = (float)mBMS.ID107.Voltage_cell_12;
+		Buffer_data[BMS_Voltage_Cell_13] = (float)mBMS.ID108.Voltage_cell_13;
 		
 		tx_buffer[0] = Header_Frame_1;
 		tx_buffer[1] = Header_Frame_2;

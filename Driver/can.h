@@ -248,7 +248,7 @@ typedef struct{
 	}ID108;
 	
 }BMS_TypeDef;
-extern volatile BMS_TypeDef ID_BMS;
+extern volatile BMS_TypeDef mBMS;
 
 
 //Single-Frame (simple) Commands

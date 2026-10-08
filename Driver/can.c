@@ -15,11 +15,13 @@
 
 extern QueueHandle_t can_rx_queue;
 
- volatile uint32_t can_queue_drop_count = 0;//Kiem tra frame khong vao Queue
+volatile uint32_t can_queue_drop_count = 0;//Kiem tra frame khong vao Queue
 
 volatile Status_Command Status_Hub;
 volatile Status_Command Status_Load;
 
+volatile BMS_TypeDef mBMS;
+volatile BMS_TypeDef *BMS_Data = &mBMS;
 
 void CAN1_Init(uint32_t Baudrate, uint8_t Prescaler){
 	if((Baudrate != 500000U) || (Prescaler != 1U)){
@@ -225,8 +227,6 @@ uint8_t CAN1_Receive(CAN1_Frame_Type *Frame){
 	return 1;
 }
 
-volatile BMS_TypeDef mBMS;
-volatile BMS_TypeDef *BMS_Data = &mBMS;
 void CAN1_Process_Frame(const CAN1_Frame_Type *Frame){
 	//Command ID of VESC
 	uint16_t command_id;
