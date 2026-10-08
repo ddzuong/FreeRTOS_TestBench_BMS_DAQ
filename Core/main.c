@@ -77,6 +77,36 @@ typedef enum{
 	Load_Current_In,
 	Load_Voltage_In,
 	
+	BMS_Total_Voltage,
+	BMS_Current,
+	BMS_Balance_Capa,
+	BMS_Rate_Capa,
+	BMS_Cycle,
+	BMS_Production_data,
+	BMS_Balance_Status,
+	BMS_Balance_Status_H,
+	BMS_Protection_Status,
+	BMS_SW_Version,
+	BMS_RSOC,
+	BMS_FET_Ctrl_Status,
+	BMS_Battery_Series,
+	BMS_NTC_Number,
+	BMS_Temp_Sensor1,
+	BMS_Temp_Sensor2,
+	BMS_Voltage_Cell_1,
+	BMS_Voltage_Cell_2,
+	BMS_Voltage_Cell_3,
+	BMS_Voltage_Cell_4,
+	BMS_Voltage_Cell_5,
+	BMS_Voltage_Cell_6,
+	BMS_Voltage_Cell_7,
+	BMS_Voltage_Cell_8,
+	BMS_Voltage_Cell_9,
+	BMS_Voltage_Cell_10,
+	BMS_Voltage_Cell_11,
+	BMS_Voltage_Cell_12,
+	BMS_Voltage_Cell_13,
+	
 	Buffer_Count
 }Tele_Field;
 static float Buffer_data[Buffer_Count];
@@ -100,7 +130,7 @@ static void Telemetry_Send(void){
 		
 		tx_buffer[0] = Header_Frame_1;
 		tx_buffer[1] = Header_Frame_2;
-		tx_buffer[54] = End_Frame;
+		tx_buffer[170] = End_Frame;
 		memcpy(&tx_buffer[2], Buffer_data, sizeof(Buffer_data));
 		DMA_USART1_Start(tx_buffer, sizeof(tx_buffer));
 }

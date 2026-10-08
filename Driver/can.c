@@ -233,6 +233,60 @@ void CAN1_Process_Frame(const CAN1_Frame_Type *Frame){
 	uint16_t controller_id;
 	volatile Status_Command *target;
 	//Check frame on bus
+	//Decode Frame BMS data
+	//volatile BMS_TypeDef *BMS_Data;
+	uint16_t id_bms;
+	id_bms = (Frame->ID & 0x0F);
+	if(Frame->IDE == 0){
+		switch(Frame->ID){
+		case 0x100:
+			BMS_Data->ID100.Total_Voltage = (int16_t)(Frame->data[0] << 8 | Frame->data[1]);
+			BMS_Data->ID100.Current	= (int16_t)(Frame->data[2] << 8 | Frame->data[3]);
+			BMS_Data->ID100.Balance_Capa = (uint16_t)(Frame->data[4] << 8 | Frame->data[5]);
+			BMS_Data->ID100.Rate_Capa = (uint16_t)(Frame->data[6] << 8 | Frame->data[7]);
+			break;
+		case 0x101:
+			BMS_Data->ID101.Cycle = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
+			BMS_Data->ID101.Production_date = (uint16_t)(Frame->data[2] << 8 | Frame->data[3]);
+			BMS_Data->ID101.Balance_Status = (uint16_t)(Frame->data[4] << 8 | Frame->data[5]);
+			BMS_Data->ID101.Balance_Status_H = (uint16_t)(Frame->data[6] << 8 | Frame->data[7]);
+			break;
+		case 0x102:
+			BMS_Data->ID102.Protection_Status = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
+			BMS_Data->ID102.SW_Version = (uint8_t)(Frame->data[2]);
+			BMS_Data->ID102.RSOC = (uint8_t)(Frame->data[3]);
+			BMS_Data->ID102.Fet_Ctrl_Sts = (uint8_t)(Frame->data[4]);
+			BMS_Data->ID102.Battery_series = (uint8_t)(Frame->data[5]);
+			BMS_Data->ID102.NTC_number = (uint8_t)(Frame->data[6]);
+			BMS_Data->ID102.Temp_sensor1_L = (int8_t)(Frame->data[7]);	
+			break;
+		case 0x104:
+			BMS_Data->ID104.Temp_Sensor1_H = (int8_t)(Frame->data[0]);
+			BMS_Data->ID104.Temp_Sensor2 = (int16_t)(Frame->data[1] << 8 | Frame->data[2]);
+			break;
+		case 0x105:
+			BMS_Data->ID105.Voltage_cell_1 = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
+			BMS_Data->ID105.Voltage_cell_2 = (uint16_t)(Frame->data[2] << 8 | Frame->data[3]);
+			BMS_Data->ID105.Voltage_cell_3 = (uint16_t)(Frame->data[4] << 8 | Frame->data[5]);
+			BMS_Data->ID105.Voltage_cell_4 = (uint16_t)(Frame->data[6] << 8 | Frame->data[7]);
+			break;
+		case 0x106:
+			BMS_Data->ID106.Voltage_cell_5 = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
+			BMS_Data->ID106.Voltage_cell_6 = (uint16_t)(Frame->data[2] << 8 | Frame->data[3]);
+			BMS_Data->ID106.Voltage_cell_7 = (uint16_t)(Frame->data[4] << 8 | Frame->data[5]);
+			BMS_Data->ID106.Voltage_cell_8 = (uint16_t)(Frame->data[6] << 8 | Frame->data[7]);
+			break;
+		case 0x107:
+			BMS_Data->ID107.Voltage_cell_9 = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
+			BMS_Data->ID107.Voltage_cell_10 = (uint16_t)(Frame->data[2] << 8 | Frame->data[3]);
+			BMS_Data->ID107.Voltage_cell_11 = (uint16_t)(Frame->data[4] << 8 | Frame->data[5]);
+			BMS_Data->ID107.Voltage_cell_12 = (uint16_t)(Frame->data[6] << 8 | Frame->data[7]);
+			break;
+		case 0x108:
+			BMS_Data->ID108.Voltage_cell_13 = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
+			break;
+	}
+	}
 	if((Frame == NULL) || (Frame->IDE == 0)){
 		return;
 	}
@@ -341,63 +395,6 @@ void CAN1_Process_Frame(const CAN1_Frame_Type *Frame){
 //		Status_Load.Status_5.Data.Tachometer = raw_tachometer;
 //		Status_Load.Status_5.Data.Volts_In = raw_volts_In;
 
-	//Decode Frame BMS data
-//	volatile BMS_TypeDef *BMS_Data;
-	uint16_t id_bms;
-	id_bms = (Frame->ID & 0x0F);
-	if((Frame == NULL) || (Frame->IDE == 1)){
-		return;
-	}
-	if(Frame->IDE == 0){
-		switch(Frame->ID){
-		case 0x100:
-			BMS_Data->ID100.Total_Voltage = (int16_t)(Frame->data[0] << 8 | Frame->data[1]);
-			BMS_Data->ID100.Current	= (int16_t)(Frame->data[2] << 8 | Frame->data[3]);
-			BMS_Data->ID100.Balance_Capa = (uint16_t)(Frame->data[4] << 8 | Frame->data[5]);
-			BMS_Data->ID100.Rate_Capa = (uint16_t)(Frame->data[6] << 8 | Frame->data[7]);
-			break;
-		case 0x101:
-			BMS_Data->ID101.Cycle = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
-			BMS_Data->ID101.Production_date = (uint16_t)(Frame->data[2] << 8 | Frame->data[3]);
-			BMS_Data->ID101.Balance_Status = (uint16_t)(Frame->data[4] << 8 | Frame->data[5]);
-			BMS_Data->ID101.Balance_Status_H = (uint16_t)(Frame->data[6] << 8 | Frame->data[7]);
-			break;
-		case 0x102:
-			BMS_Data->ID102.Protection_Status = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
-			BMS_Data->ID102.SW_Version = (uint8_t)(Frame->data[2]);
-			BMS_Data->ID102.RSOC = (uint8_t)(Frame->data[3]);
-			BMS_Data->ID102.Fet_Ctrl_Sts = (uint8_t)(Frame->data[4]);
-			BMS_Data->ID102.Battery_series = (uint8_t)(Frame->data[5]);
-			BMS_Data->ID102.NTC_number = (uint8_t)(Frame->data[6]);
-			BMS_Data->ID102.Temp_sensor1_L = (int8_t)(Frame->data[7]);	
-			break;
-		case 0x104:
-			BMS_Data->ID104.Temp_Sensor1_H = (int8_t)(Frame->data[0]);
-			BMS_Data->ID104.Temp_Sensor2 = (int16_t)(Frame->data[1] << 8 | Frame->data[2]);
-			break;
-		case 0x105:
-			BMS_Data->ID105.Voltage_cell_1 = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
-			BMS_Data->ID105.Voltage_cell_2 = (uint16_t)(Frame->data[2] << 8 | Frame->data[3]);
-			BMS_Data->ID105.Voltage_cell_3 = (uint16_t)(Frame->data[4] << 8 | Frame->data[5]);
-			BMS_Data->ID105.Voltage_cell_4 = (uint16_t)(Frame->data[6] << 8 | Frame->data[7]);
-			break;
-		case 0x106:
-			BMS_Data->ID106.Voltage_cell_5 = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
-			BMS_Data->ID106.Voltage_cell_6 = (uint16_t)(Frame->data[2] << 8 | Frame->data[3]);
-			BMS_Data->ID106.Voltage_cell_7 = (uint16_t)(Frame->data[4] << 8 | Frame->data[5]);
-			BMS_Data->ID106.Voltage_cell_8 = (uint16_t)(Frame->data[6] << 8 | Frame->data[7]);
-			break;
-		case 0x107:
-			BMS_Data->ID107.Voltage_cell_9 = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
-			BMS_Data->ID107.Voltage_cell_10 = (uint16_t)(Frame->data[2] << 8 | Frame->data[3]);
-			BMS_Data->ID107.Voltage_cell_11 = (uint16_t)(Frame->data[4] << 8 | Frame->data[5]);
-			BMS_Data->ID107.Voltage_cell_12 = (uint16_t)(Frame->data[6] << 8 | Frame->data[7]);
-			break;
-		case 0x108:
-			BMS_Data->ID108.Voltage_cell_13 = (uint16_t)(Frame->data[0] << 8 | Frame->data[1]);
-			break;
-	}
-	}
 } 
 
 void USB_LP_CAN1_RX0_IRQHandler(void){
