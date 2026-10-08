@@ -195,7 +195,7 @@ extern volatile Status_Command Status_Load;
 typedef struct{
 	struct{
 		uint16_t Total_Voltage;
-		uint16_t Current;
+		int16_t Current;
 		uint16_t Balance_Capa;
 		uint16_t Rate_Capa;
 	}ID100;
@@ -214,12 +214,12 @@ typedef struct{
 		uint8_t Fet_Ctrl_Sts;
 		uint8_t Battery_series;
 		uint8_t NTC_number;
-		uint8_t Temp_sensor1_L;
+		int8_t Temp_sensor1_L;
 	}ID102;
 	
 	struct{
-		uint8_t Temp_Sensor1_H;
-		uint16_t Temp_Sensor2;
+		int8_t Temp_Sensor1_H;
+		int16_t Temp_Sensor2;
 	}ID104;
 	
 	struct{
