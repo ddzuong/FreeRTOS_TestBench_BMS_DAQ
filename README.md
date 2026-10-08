@@ -72,3 +72,8 @@ Task encode dùng binary semaphore để đồng bộ với DMA truyền UART. K
 
 *Hình 6. Dữ liệu từng cell series*
 <br>
+
+![Chu kì truyền UART](docs/images/Cycle_UART_Transmit.jpg)
+
+*Hình 7. Chu kì truyền UART mỗi 100ms*
+<br>
