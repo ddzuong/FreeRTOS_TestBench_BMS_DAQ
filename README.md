@@ -42,17 +42,24 @@ Task encode dùng binary semaphore để đồng bộ với DMA truyền UART. K
 
 ![Các CAN ID, DLC và Payload](docs/images/CAN_analyzer.jpg)
 *Hình 1. Các CAN ID, DLC và payload của VESC và BMS trên Cangaroo*
+<br>
+
 ![Kiểm tra UART frame bằng Logic Analyzer](docs/images/UART_Frame1.jpg)
 *Hình 2. CÁC UART frame bắt đầu bằng 0x67 & 0x89, cùng với PAYLOAD và endframe là 0xFF*
+<br>
 
 ![Kiểm tra UART frame bằng Logic Analyzer](docs/images/UART_Frame2.jpg)
 *Hình 3. CÁC UART frame bắt đầu bằng 0x67 & 0x89, cùng với PAYLOAD và endframe là 0xFF*
+<br>
 
 ![Dữ liệu Firebase TestBench](docs/images/TestBench_FireBase.jpg)
 *Hình 4. Dữ liệu Firebase TestBench*
+<br>
 
 ![Dữ liệu BMS](docs/images/Data_Basic_BMS.jpg)
 *Hình 5. Dữ liệu BMS*
+<br>
 
 ![Dữ liệu BMS](docs/images/Cell_Voltage_BMS.jpg)
 *Hình 6. Dữ liệu từng cell series*
+<br>
