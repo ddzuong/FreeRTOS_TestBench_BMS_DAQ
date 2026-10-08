@@ -17,11 +17,11 @@ với DMA UART giúp task truyền chỉ tiếp tục khi quá trình truyền t
 
 ## 2. FreeRTOS Task Architecture
 
-| Task          | Priority      | Nhiệm vụ                                                                          |
-|---------------|---------------|---------------------------------------------------------------------------------- |
-| Task User     | 3             | Đọc công tắc chọn tải, cập nhật mức tải và gửi lệnh hãm đến VESC của Load motor   |
-| Task_Decode   | 2             | Xử lý dữ liệu CAN của TestBench và BMS, chuyển đổi dữ liệu ADC của cảm biến mô-men|
-| Task_Encode   | 2             | Đóng gói dữ liệu TestBench và BMS thành frame UART truyền đến ESP32 sử dụng DMA   |
+| Task          | Priority      | Nhiệm vụ                                                                              |
+|---------------|---------------|---------------------------------------------------------------------------------------|
+| Task User     | 3             | Đọc công tắc chọn tải, cập nhật mức tải và gửi lệnh hãm đến VESC của Load motor       |
+| Task_Decode   | 2             | Xử lý dữ liệu CAN của TestBench và BMS, chuyển đổi dữ liệu ADC_DMA của cảm biến mô-men|
+| Task_Encode   | 2             | Đóng gói dữ liệu TestBench và BMS thành frame UART truyền đến ESP32 sử dụng DMA       |
 
 
 Task_User được sử dụng ở mức ưu tiên cao nhất do người sử dụng tác động trực tiếp 
@@ -32,7 +32,7 @@ Task_Encode sử dụng Semaphore binary để đồng bộ truyền UART_DMA sa
 
 ### Queue
 
-Hàm nhận ngắt của CAN, hay còn gọi là USB_LP_CAN1_RX0_IRQHandler() sẽ gửi frame data (gồm có dữ liệu VESC, BMS,..) vào trong queue, và task decode sẽ đảm nhận
+Hàm nhận ngắt của CAN, hay còn gọi là USB_LP_CAN1_RX0_IRQHandler() sẽ gửi frame data (gồm có dữ liệu VESC, BMS,..) vào trong queue, và task decode sẽ đảm nhận việc xử lí lấy frame trong queue bằng xQueueReceive() và gọi hàm xử lí CAN frame CAN1_Process_Frame() để giải mã
 
 ### Semaphore
 
@@ -41,8 +41,18 @@ Task encode dùng binary semaphore để đồng bộ với DMA truyền UART. K
 ## 4. Kết quả thực tế
 
 ![Các CAN ID, DLC và Payload](docs/images/CAN_analyzer.jpg)
+*Hình 1. Các CAN ID, DLC và payload của VESC và BMS trên Cangaroo*
 ![Kiểm tra UART frame bằng Logic Analyzer](docs/images/UART_Frame1.jpg)
+*Hình 2. CÁC UART frame bắt đầu bằng 0x67 & 0x89, cùng với PAYLOAD và endframe là 0xFF*
+
 ![Kiểm tra UART frame bằng Logic Analyzer](docs/images/UART_Frame2.jpg)
+*Hình 3. CÁC UART frame bắt đầu bằng 0x67 & 0x89, cùng với PAYLOAD và endframe là 0xFF*
+
 ![Dữ liệu Firebase TestBench](docs/images/TestBench_FireBase.jpg)
+*Hình 4. Dữ liệu Firebase TestBench*
+
 ![Dữ liệu BMS](docs/images/Data_Basic_BMS.jpg)
+*Hình 5. Dữ liệu BMS*
+
 ![Dữ liệu BMS](docs/images/Cell_Voltage_BMS.jpg)
+*Hình 6. Dữ liệu từng cell series*
